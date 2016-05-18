@@ -56,6 +56,7 @@ public class TagsEditText extends AutoCompleteTextView {
     private static final String SUPER_STATE = "superState";
     private static final String UNDER_CONSTRUCTION_TAG = "underConstructionTag";
     private static final String ALLOW_SPACES_IN_TAGS = "allowSpacesInTags";
+    private static final String ADD_HASTAG_SYMBOL = "addHastagSymbol";
 
     private static final String TAGS_BACKGROUND = "tagsBackground";
     private static final String TAGS_TEXT_COLOR = "tagsTextColor";
@@ -79,6 +80,7 @@ public class TagsEditText extends AutoCompleteTextView {
     private int mDrawablePadding;
 
     private boolean mIsSpacesAllowedInTags = false;
+    private boolean mAddHashtagSymbol = true;
     private boolean mIsSetTextDisabled = false;
 
     private List<TagSpan> mTagSpans = new ArrayList<>();
@@ -214,7 +216,7 @@ public class TagsEditText extends AutoCompleteTextView {
         bundle.putInt(RIGHT_DRAWABLE_RESOURCE, mRightDrawableResouce);
         bundle.putInt(DRAWABLE_PADDING, mDrawablePadding);
         bundle.putBoolean(ALLOW_SPACES_IN_TAGS, mIsSpacesAllowedInTags);
-
+        bundle.putBoolean(ADD_HASTAG_SYMBOL, mAddHashtagSymbol);
         return bundle;
     }
 
@@ -228,6 +230,7 @@ public class TagsEditText extends AutoCompleteTextView {
             mTagsTextColor = bundle.getInt(TAGS_TEXT_COLOR, mTagsTextColor);
             mTagsBackground = bundle.getInt(TAGS_BACKGROUND, mTagsBackground);
             mTagsTextSize = bundle.getFloat(TAGS_TEXT_SIZE, mTagsTextSize);
+            mAddHashtagSymbol = bundle.getBoolean(ADD_HASTAG_SYMBOL);
 
             mLeftDrawableResouce = bundle.getInt(LEFT_DRAWABLE_RESOURCE, mLeftDrawableResouce);
             if (mLeftDrawableResouce != 0) {
@@ -545,6 +548,10 @@ public class TagsEditText extends AutoCompleteTextView {
     }
 
     private TextView createTextView(String text) {
+        if (mAddHashtagSymbol && !text.startsWith("#")) {
+            text = "#" + text;
+        }
+
         TextView textView = new TextView(getContext());
         if (getWidth() > 0) {
             textView.setMaxWidth(getWidth() - 50);
