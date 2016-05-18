@@ -136,6 +136,10 @@ public class TagsEditText extends AutoCompleteTextView {
         }
     }
 
+    public Collection<String>getTags() {
+        return convertTagSpanToList(mTagSpans);
+    }
+
     /**
      * do not use this method to set tags
      */
