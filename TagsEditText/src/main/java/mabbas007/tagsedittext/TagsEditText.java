@@ -83,6 +83,8 @@ public class TagsEditText extends AutoCompleteTextView {
     private boolean mAddHashtagSymbol = true;
     private boolean mIsSetTextDisabled = false;
 
+    private boolean mFinished = false;
+
     private List<TagSpan> mTagSpans = new ArrayList<>();
     private List<Tag> mTags = new ArrayList<>();
 
@@ -134,6 +136,11 @@ public class TagsEditText extends AutoCompleteTextView {
         } else {
             super.onSelectionChanged(selStart, selEnd);
         }
+    }
+
+    public void finishEditing() {
+        mFinished = true;
+        setTags();
     }
 
     public Collection<String>getTags() {
@@ -400,7 +407,8 @@ public class TagsEditText extends AutoCompleteTextView {
             performFiltering(getNewTag(str), 0);
         }
 
-        if (str.endsWith(NEW_LINE) || (!mIsSpacesAllowedInTags && str.endsWith(SEPARATOR)) && !isDeleting) {
+        if (str.endsWith(NEW_LINE) || (!mIsSpacesAllowedInTags && str.endsWith(SEPARATOR) || mFinished)
+                && !isDeleting) {
             buildTags(str);
         }
 
@@ -451,7 +459,7 @@ public class TagsEditText extends AutoCompleteTextView {
         String source = getNewTag(newString);
         if (!TextUtils.isEmpty(source) && !source.equals(NEW_LINE)) {
             boolean isSpan = source.endsWith(NEW_LINE) ||
-                    (!mIsSpacesAllowedInTags && source.endsWith(SEPARATOR));
+                    (!mIsSpacesAllowedInTags && source.endsWith(SEPARATOR)) || mFinished;
             if (isSpan) {
                 source = source.substring(0, source.length() - 1);
                 source = source.trim();
