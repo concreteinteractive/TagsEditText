@@ -461,7 +461,10 @@ public class TagsEditText extends AutoCompleteTextView {
             boolean isSpan = source.endsWith(NEW_LINE) ||
                     (!mIsSpacesAllowedInTags && source.endsWith(SEPARATOR)) || mFinished;
             if (isSpan) {
-                source = source.substring(0, source.length() - 1);
+                if (source.endsWith(NEW_LINE) ||
+                        (!mIsSpacesAllowedInTags && source.endsWith(SEPARATOR))) {
+                    source = source.substring(0, source.length() - 1);
+                }
                 source = source.trim();
             }
             Tag tag = new Tag();
